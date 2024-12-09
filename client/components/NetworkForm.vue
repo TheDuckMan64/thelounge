@@ -98,6 +98,14 @@
 							/>
 							Only allow trusted certificates
 						</label>
+						<label class="tls">
+							<input
+								v-model="defaults.rejectUnauthorizedOverride"
+								type="checkbox"
+								name="rejectUnauthorizedOverride"
+							/>
+							Bypass certificate verification. Useful for self-signed certs.
+						</label>
 					</div>
 				</div>
 

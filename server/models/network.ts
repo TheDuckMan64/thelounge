@@ -22,6 +22,7 @@ type NetworkIrcOptions = {
 	gecos: string;
 	tls: boolean;
 	rejectUnauthorized: boolean;
+	rejectUnauthorizedOverride: boolean;
 	webirc: WebIRC | null;
 	client_certificate: ClientCertificateType | null;
 	socks?: {
@@ -68,6 +69,7 @@ export type NetworkConfig = {
 	tls: boolean;
 	userDisconnected: boolean;
 	rejectUnauthorized: boolean;
+	rejectUnauthorizedOverride: boolean;
 	password: string;
 	awayMessage: string;
 	commands: any[];
@@ -96,6 +98,7 @@ class Network {
 	tls!: boolean;
 	userDisconnected!: boolean;
 	rejectUnauthorized!: boolean;
+	rejectUnauthorizedOverride!: boolean;
 	password!: string;
 	awayMessage!: string;
 	commands!: any[];
@@ -142,6 +145,7 @@ class Network {
 			tls: false,
 			userDisconnected: false,
 			rejectUnauthorized: false,
+			rejectUnauthorizedOverride: false,
 			password: "",
 			awayMessage: "",
 			commands: [],
@@ -398,6 +402,7 @@ class Network {
 		this.port = parseInt(args.port, 10);
 		this.tls = !!args.tls;
 		this.rejectUnauthorized = !!args.rejectUnauthorized;
+		this.rejectUnauthorizedOverride = !!args.rejectUnauthorizedOverride;
 		this.password = String(args.password || "");
 		this.username = String(args.username || "");
 		this.realname = String(args.realname || "");
@@ -523,9 +528,10 @@ class Network {
 			if (transport.socket) {
 				const isLocalhost = transport.socket.remoteAddress === "127.0.0.1";
 				const isAuthorized = transport.socket.encrypted && transport.socket.authorized;
+				const isOverriden = this.rejectUnauthorizedOverride;
 
 				status.connected = transport.isConnected();
-				status.secure = isAuthorized || isLocalhost;
+				status.secure = isAuthorized || isLocalhost || isOverriden;
 			}
 		}
 

@@ -14,7 +14,11 @@
 		<div class="lobby-wrap">
 			<span :title="channel.name" class="name">{{ channel.name }}</span>
 			<span
-				v-if="network.status.connected && !network.status.secure"
+				v-if="
+					!network.status.secureOverride &&
+					network.status.connected &&
+					!network.status.secure
+				"
 				class="not-secure-tooltip tooltipped tooltipped-w"
 				aria-label="Insecure connection"
 			>
